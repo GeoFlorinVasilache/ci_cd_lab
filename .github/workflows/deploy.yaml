@@ -4,9 +4,10 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
-  compile:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -20,5 +21,12 @@ jobs:
       - name: Install dependencies
         run: go mod download
 
+      - name: Run tests
+        run: go test ./...
+
+  compile:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
       - name: Compile binary
         run: go build -o myapp
